@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TaskListItem from './task-list-item';
 import cn from 'classnames';
+import TaskListFooter from './task-list-footer';
 
 var ENTER_KEY = 13;
 var ESC_KEY = 27;
@@ -12,6 +13,7 @@ class App extends React.Component {
     this.state = { taskList: [] };
   }
 
+  //on mount fetch all the tasks from the api
   componentDidMount() {
     fetch('/api/task-list')
       .then(response => response.json())
@@ -46,6 +48,7 @@ class App extends React.Component {
     })
   }
 
+  //persist changes to an existing task and update local state on success
   persistChanges = (idx, task, changes) => {
     const body = JSON.stringify(changes);
     const headers = new Headers();
@@ -151,26 +154,7 @@ class App extends React.Component {
           <span className="todo-count">
             <strong>1</strong> item left
           </span>
-          <ul className="filters">
-            <li><a href="#"
-              className={cn({selected : this.state.filter === undefined})}
-              onClick={this.setFilter.bind(this, undefined)}
-            >
-              All
-            </a></li>
-            <li><a href="#"
-              className={cn({selected : this.state.filter === false})}
-              onClick={this.setFilter.bind(this, false)}
-            >
-              Active
-            </a></li>
-            <li><a href="#"
-              className={cn({selected : this.state.filter === true})}
-              onClick={this.setFilter.bind(this, true)}
-            >
-              Completed
-            </a></li>
-          </ul>
+          <TaskListFooter filter={this.state.filter} setFilter={this.setFilter}/>
         </footer>
         </section>
       </div>
@@ -178,6 +162,7 @@ class App extends React.Component {
   }
 }
 
+//Load the app in the empty div in the DOM.
 ReactDOM.render(
   <App/>,
   document.getElementById('app')

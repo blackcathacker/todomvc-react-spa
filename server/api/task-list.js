@@ -4,11 +4,13 @@ import wrapAsync from './wrap-async';
 import mongoose from 'mongoose';
 const router = express.Router();
 
+//get all tasks
 async function getAll(req, res) {
   const taskList = await TaskList.find();
   return res.send(taskList);
 }
 
+//get a single task
 async function get(req, res) {
   const task = await TaskList.findOne({id : req.params.id});
   if (task) {
@@ -18,6 +20,7 @@ async function get(req, res) {
   }
 }
 
+//create a new task
 async function post(req, res) {
   const newTask = new TaskList({id : new mongoose.Types.ObjectId(), ...req.body});
   console.log('adding new task', newTask);
@@ -25,6 +28,7 @@ async function post(req, res) {
   return res.send(newTask);
 }
 
+//update an existing task
 async function put(req, res) {
   const task = await TaskList.findOne({id: req.params.id});
   if (task) {
@@ -37,6 +41,7 @@ async function put(req, res) {
   }
 }
 
+//remove a task
 async function remove(req, res) {
   const task = await TaskList.findOne({id: req.params.id});
   if (task) {
